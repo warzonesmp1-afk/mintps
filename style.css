@@ -227,3 +227,26 @@ button:hover {
         font-size: 28px;
     }
 }
+/* Burger menu animation */
+.burger {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  font-size: 32px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.4);
+  padding: 6px 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0,0,60,0.1);
+  transition: 0.3s;
+  z-index: 1000;
+}
+
+.burger:hover {
+  background: rgba(255,255,255,0.8);
+}
+
+.burger.open {
+  transform: rotate(90deg); /* simple X effect */
+    }
