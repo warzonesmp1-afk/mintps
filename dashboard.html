@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- BURGER BUTTON -->
+<div class="burger" onclick="toggleMenu()">≡</div>
+
+<!-- SLIDE MENU -->
+<div id="sideMenu" class="side-menu">
+    <h2>MENU</h2>
+    <ul>
+        <li onclick="location.href='profile.html'">Profile</li>
+        <li onclick="location.href='shop.html'">Shop</li>
+        <li onclick="location.href='how.html'">How to Play</li>
+        <li onclick="location.href='discord.html'">Discord</li>
+        <li id="adminBtn" style="display:none;" onclick="location.href='admin.html'">Admin Panel</li>
+        <li class="logout" onclick="logout()">Logout</li>
+    </ul>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+    <h1 class="title">SERVER</h1>
+
+    <!-- INFORMATION BOX -->
+    <div class="card">
+        <h2>INFORMATION</h2>
+        <p>: This is website for my server</p>
+    </div>
+
+    <!-- SERVER CREATE BOX -->
+    <div class="card">
+        <h2>SERVER CREATE</h2>
+        <p>12/10/25</p>
+    </div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+// Toggle burger menu
+function toggleMenu() {
+    document.getElementById("sideMenu").classList.toggle("open");
+}
+
+// Logout
+function logout() {
+    localStorage.removeItem("currentUser");
+    window.location.href = "index.html";
+}
+
+// Show admin button only for admin or specific code
+const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+if (currentUser.name === "admin15" || currentUser.code === "W783UUJH") {
+    document.getElementById("adminBtn").style.display = "block";
+}
+
+// Close menu if clicked outside
+document.addEventListener("click", function(e) {
+    const menu = document.getElementById("sideMenu");
+    const burger = document.querySelector(".burger");
+    if (!menu.contains(e.target) && !burger.contains(e.target)) {
+        menu.classList.remove("open");
+    }
+});
+</script>
+
+</body>
+</html>
