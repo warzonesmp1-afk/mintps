@@ -1,40 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
     <h1 class="title">Shop</h1>
 
+    <!-- Diamond Balance -->
     <div class="card">
-        <h2>Available Items</h2>
-        <div class="shop-grid">
-            <div class="shop-item">
-                <h3>Item 1</h3>
-                <p>Price: 100 coins</p>
-                <button onclick="buyItem('Item 1')">Buy</button>
-            </div>
-            <div class="shop-item">
-                <h3>Item 2</h3>
-                <p>Price: 200 coins</p>
-                <button onclick="buyItem('Item 2')">Buy</button>
-            </div>
-            <div class="shop-item">
-                <h3>Item 3</h3>
-                <p>Price: 150 coins</p>
-                <button onclick="buyItem('Item 3')">Buy</button>
-            </div>
-            <div class="shop-item">
-                <h3>Item 4</h3>
-                <p>Price: 250 coins</p>
-                <button onclick="buyItem('Item 4')">Buy</button>
-            </div>
-        </div>
+        <h2>Your Diamonds:</h2>
+        <p id="diamondBalance" style="font-size:22px;font-weight:700;color:#004080;"></p>
+    </div>
+
+    <!-- Shop Tabs -->
+    <div class="card">
+        <button onclick="showSection('Role')">Role</button>
+        <button onclick="showSection('Assets')">Assets</button>
+        <button onclick="showSection('Others')">Others</button>
+    </div>
+
+    <!-- Shop Items -->
+    <div id="shopItems" class="shop-grid"></div>
+
+    <button onclick="back()">Back to Dashboard</button>
+</div>
+
+<script>
+// Current user
+let currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+
+// Show diamond balance
+function updateDiamonds() {
+    document.getElementById("diamondBalance").textContent = currentUser.diamonds || 0;
+}
+updateDiamonds();
+
+// Shop data
+const shopData = [
+    {name:"VIP Role", cost:50, section:"Role"},
+    {name:"Moderator Role", cost:100, section:"Role"},
+    {name:"Custom Hat", cost:30, section:"Assets"},
+    {name:"Exclusive Cape", cost:70, section:"Assets"},
+    {name:"Special World Access", cost:60, section:"Others"},
+    {name:"Bonus Pack", cost:40, section:"Others"}
+];
+
+// Show section
+function showSection(section) {
+    const container = document.getElementById("shopItems");
+    container.innerHTML = "";
+    shopData.filter(item => item.section === section).forEach(item => {
+        const div = document.createElement("div");
+        div.className = "shop-item";
+        div.innerHTML = `
+            <h3>${item.name}</h3>
+            <p>Cost: ${item.cost} Diamonds</p>
+            <button onclick="buyItem('${item.name}', ${item.cost})">Buy</button>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// Buy function
+function buyItem(itemName, cost) {
+    if(currentUser.diamonds < cost) {
+        alert("Not enough diamonds!");
+        return;
+    }
+
+    const growtopiaName = prompt("Enter your Growtopia name:");
+    const world = prompt("Enter your server world:");
+
+    if(!growtopiaName || !world) {
+        alert("You must enter both Growtopia name and world!");
+        return;
+    }
+
+    // Deduct diamonds and save purchase
+    currentUser.diamonds -= cost;
+    if(!currentUser.purchases) currentUser.purchases = [];
+    currentUser.purchases.push({
+        item: itemName,
+        cost: cost,
+        growtopiaName: growtopiaName,
+        world: world,
+        date: new Date().toLocaleDateString()
+    });
+
+    // Update localStorage
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+    // Update main users array
+    let users = JSON.parse(localStorage.getItem("users") || "[]");
+    const index = users.findIndex(u => u.name === currentUser.name && u.code === currentUser.code);
+    if(index !== -1) users[index] = currentUser;
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Purchase successful!");
+    updateDiamonds();
+}
+
+// Show first section by default
+showSection("Role");
+
+// Back button
+function back() {
+    window.location.href = "dashboard.html";
+}
+</script>
+</body>
+</html>        </div>
     </div>
 
     <button onclick="back()">Back to Dashboard</button>
