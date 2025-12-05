@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="title">Shop</h1>
+
+    <div class="card">
+        <h2>Available Items</h2>
+        <div class="shop-grid">
+            <div class="shop-item">
+                <h3>Item 1</h3>
+                <p>Price: 100 coins</p>
+                <button onclick="buyItem('Item 1')">Buy</button>
+            </div>
+            <div class="shop-item">
+                <h3>Item 2</h3>
+                <p>Price: 200 coins</p>
+                <button onclick="buyItem('Item 2')">Buy</button>
+            </div>
+            <div class="shop-item">
+                <h3>Item 3</h3>
+                <p>Price: 150 coins</p>
+                <button onclick="buyItem('Item 3')">Buy</button>
+            </div>
+            <div class="shop-item">
+                <h3>Item 4</h3>
+                <p>Price: 250 coins</p>
+                <button onclick="buyItem('Item 4')">Buy</button>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="back()">Back to Dashboard</button>
+</div>
+
+<script>
+// Buy function
+function buyItem(itemName) {
+    let user = JSON.parse(localStorage.getItem("currentUser") || "{}");
+    if (!user.purchases) user.purchases = [];
+    user.purchases.push({item: itemName, date: new Date().toLocaleDateString()});
+    localStorage.setItem("currentUser", JSON.stringify(user));
+
+    // Update main users array to persist
+    let users = JSON.parse(localStorage.getItem("users") || "[]");
+    const index = users.findIndex(u => u.name === user.name && u.code === user.code);
+    if (index !== -1) users[index] = user;
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("You bought: " + itemName + "!");
+}
+
+function back() {
+    window.location.href = "dashboard.html";
+}
+</script>
+
+<style>
+/* Shop Grid */
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Shop Item Card */
+.shop-item {
+    background: rgba(255,255,255,0.4);
+    padding: 18px;
+    border-radius: 15px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 6px 20px rgba(0,0,60,0.1);
+}
+.shop-item h3 {
+    margin-bottom: 10px;
+    color: #003366;
+}
+.shop-item p {
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #003366;
+}
+.shop-item button {
+    background: rgba(255,255,255,0.6);
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    backdrop-filter: blur(8px);
+}
+.shop-item button:hover {
+    background: rgba(255,255,255,0.85);
+}
+</style>
+
+</body>
+</html>
