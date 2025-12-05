@@ -64,9 +64,11 @@ if (currentUser.name === "admin15" || currentUser.code === "W783UUJH") {
 document.addEventListener("click", function(e) {
     const menu = document.getElementById("sideMenu");
     const burger = document.querySelector(".burger");
-    if (!menu.contains(e.target) && !burger.contains(e.target)) {
-        menu.classList.remove("open");
-    }
+function toggleMenu() {
+  const menu = document.getElementById("sideMenu");
+  menu.classList.toggle("open");
+  burger.classList.toggle("open"); // rotate burger
+}
 });
 </script>
 
