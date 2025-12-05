@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="title">Your Profile</h1>
+
+    <div class="card">
+        <h2>Name:</h2>
+        <p id="showName" style="font-size:20px;font-weight:700;color:#004080;margin-top:5px;"></p>
+
+        <h2>Code:</h2>
+        <div class="code-box">
+            <input type="text" id="showCode" readonly style="font-size:18px;font-weight:600;">
+            <button class="copy-btn" onclick="copyProfileCode()">📋</button>
+        </div>
+
+        <h2>Signup Date:</h2>
+        <p id="showDate" style="font-size:18px;font-weight:600;color:#004080;"></p>
+
+        <h2>Purchases:</h2>
+        <ul id="purchaseList" style="margin-top:10px;"></ul>
+    </div>
+
+    <button onclick="back()">Back to Dashboard</button>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
+
+// Display user info
+if (user.name) document.getElementById("showName").textContent = user.name;
+if (user.code) document.getElementById("showCode").value = user.code;
+if (user.date) document.getElementById("showDate").textContent = user.date;
+
+// Display purchases
+const purchaseList = document.getElementById("purchaseList");
+if (user.purchases && user.purchases.length > 0) {
+    user.purchases.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = `${p.item} - ${p.date}`;
+        purchaseList.appendChild(li);
+    });
+} else {
+    const li = document.createElement("li");
+    li.textContent = "No purchases yet";
+    purchaseList.appendChild(li);
+}
+
+// Copy code
+function copyProfileCode() {
+    if (user.code) {
+        navigator.clipboard.writeText(user.code);
+        alert("Code copied!");
+    } else {
+        alert("No code found!");
+    }
+}
+
+// Back to dashboard
+function back() {
+    window.location.href = "dashboard.html";
+}
+</script>
+
+</body>
+</html>
